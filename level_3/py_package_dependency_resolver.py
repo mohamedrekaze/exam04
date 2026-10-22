@@ -46,39 +46,30 @@ import heapq
 def package_dependency_resolver(packages: dict[str, list[str]]) -> list[str]:
     indegree = {pkg: 0 for pkg in packages}
     dependents = {pkg: [] for pkg in packages}
-
-    # loop over all packages and its dependencies
-    # for each dependency for the package increment number of indegree
-    # and for each dependency 
-
     for pkg, deps in packages.items():
         for dep in set(deps):
             if dep in packages:
                 indegree[pkg] += 1
                 dependents[dep].append(pkg)
-
     heap = [
         pkg for pkg in packages
         if indegree[pkg] == 0
     ]
     heapq.heapify(heap)
-
     result = []
     while heap:
         pkg = heapq.heappop(heap)
         result.append(pkg)
-        for dependent in dependents[pkg]:
-            indegree[dependent] -= 1
-            if indegree[dependent] == 0:
-                heapq.heappush(heap, dependent)
-
+        for dep in dependents[pkg]:
+            indegree[dep] -= 1
+            if indegree[dep] == 0:
+                heapq.heappush(heap, dep)
     if len(result) != len(packages):
         return []
     return result
 
-
 print(package_dependency_resolver({"app": ["database"], "database": ["driver"], "driver": []})  , 'Expected: ["driver", "database", "app"]')
-# print(package_dependency_resolver({"A": [], "B": ["A"], "C": ["A", "B"]})  , 'Expected: ["A", "B", "C"]')
-# print(package_dependency_resolver({})  ,'Expected: []')
-# print(package_dependency_resolver({"X": ["Y"], "Y": ["X"]})  , 'Expected: []')
-# print(package_dependency_resolver({"web": [], "api": [], "frontend": ["web"], "backend": ["api"]})  , 'Expected: ["api", "web", "backend", "frontend"]')
+print(package_dependency_resolver({"A": [], "B": ["A"], "C": ["A", "B"]})  , 'Expected: ["A", "B", "C"]')
+print(package_dependency_resolver({})  ,'Expected: []')
+print(package_dependency_resolver({"X": ["Y"], "Y": ["X"]})  , 'Expected: []')
+print(package_dependency_resolver({"web": [], "api": [], "frontend": ["web"], "backend": ["api"]})  , 'Expected: ["api", "web", "backend", "frontend"]')
