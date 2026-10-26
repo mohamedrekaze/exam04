@@ -27,22 +27,6 @@
 
 import heapq
 
-# Algorithm explanation
-# 1. build indegree and reverse adjacency
-#   1. iterate over every package and its dependency list
-#   2. deduplicate the dependencies with set(deps)
-#   3. skip dependencies not present in packages
-#   4. increment indegree[pkg] once per distinct existing dependency
-#   5. append pkg to dependents[dep] (edge dep -> pkg)
-# 2. add all packages with indegree 0 to a heap, keeping alphabetical order
-#    (the heap yields the lexicographically smallest valid order)
-# 3. for every package popped, decrement each dependent's indegree
-#    and push the dependent into the heap when its indegree reaches 0
-# 4. detect a cycle (including self-dependency) if the result length
-#    doesn't match the number of packages
-
-import heapq
-
 def package_dependency_resolver(packages: dict[str, list[str]]) -> list[str]:
     indegree = {pkg: 0 for pkg in packages}
     dependents = {pkg: [] for pkg in packages}
