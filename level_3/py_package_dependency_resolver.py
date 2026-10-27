@@ -25,8 +25,6 @@
 # - A package cannot be installed until all its dependencies are installed
 # - If any circular dependency exists, no valid installation order is possible
 
-import heapq
-
 def package_dependency_resolver(packages: dict[str, list[str]]) -> list[str]:
     indegree = {pkg: 0 for pkg in packages}
     dependents = {pkg: [] for pkg in packages}
@@ -35,19 +33,17 @@ def package_dependency_resolver(packages: dict[str, list[str]]) -> list[str]:
             if dep in packages:
                 indegree[pkg] += 1
                 dependents[dep].append(pkg)
-    heap = [
-        pkg for pkg in packages
-        if indegree[pkg] == 0
-    ]
-    heapq.heapify(heap)
+    wave = sorted([pkg for pkg in packages if indegree[pkg] == 0])
     result = []
-    while heap:
-        pkg = heapq.heappop(heap)
-        result.append(pkg)
-        for dep in dependents[pkg]:
-            indegree[dep] -= 1
-            if indegree[dep] == 0:
-                heapq.heappush(heap, dep)
+    while wave:
+        result.extend(wave)
+        next_wave = []
+        for package in wave:
+            for dependent in dependents[package]:
+                indegree[dependent] -= 1
+                if indegree[dependent] == 0:
+                    next_wave.append(dependent)
+        wave = sorted(next_wave)
     if len(result) != len(packages):
         return []
     return result
