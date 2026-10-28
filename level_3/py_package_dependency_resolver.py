@@ -26,26 +26,16 @@
 # - If any circular dependency exists, no valid installation order is possible
 
 def package_dependency_resolver(packages: dict[str, list[str]]) -> list[str]:
-    indegree = {pkg: 0 for pkg in packages}
-    dependents = {pkg: [] for pkg in packages}
-    for pkg, deps in packages.items():
-        for dep in set(deps):
-            if dep in packages:
-                indegree[pkg] += 1
-                dependents[dep].append(pkg)
-    wave = sorted([pkg for pkg in packages if indegree[pkg] == 0])
     result = []
-    while wave:
-        result.extend(wave)
-        next_wave = []
-        for package in wave:
-            for dependent in dependents[package]:
-                indegree[dependent] -= 1
-                if indegree[dependent] == 0:
-                    next_wave.append(dependent)
-        wave = sorted(next_wave)
-    if len(result) != len(packages):
-        return []
+    while len(result) < len(packages):
+        wave = sorted(
+            pkg for pkg in packages
+            if pkg not in result
+            and all(dep in result or dep not in packages for dep in packages[pkg])
+        )
+        if not wave:
+            return []
+        result += wave
     return result
 
 print(package_dependency_resolver({"app": ["database"], "database": ["driver"], "driver": []})  , 'Expected: ["driver", "database", "app"]')

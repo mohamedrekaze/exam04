@@ -7,12 +7,15 @@
 # - Handle empty input or empty lists gracefully
 # - If any list is empty, the intersection is empty
 
+# def list_intersection_finder(lists: list[list[int]]) -> list[int]:
+#     if not len(lists):
+#         return []
+#     n_list = [set(it) for it in lists]
+#     common = set.intersection(*n_list)
+#     return sorted(list(common))
+
 def list_intersection_finder(lists: list[list[int]]) -> list[int]:
-    if not len(lists):
-        return []
-    n_list = [set(it) for it in lists]
-    common = set.intersection(*n_list)
-    return sorted(list(common))
+    return sorted(set.intersection(*map(set, lists))) if lists else []
 
 print(list_intersection_finder([[1, 2, 3], [2, 3, 4], [2, 3, 5]]),  " Expected: [2, 3]")
 print(list_intersection_finder([[1, 2, 3, 4], [2, 4, 6, 8], [4, 8, 12]]),  " Expected: [4]")

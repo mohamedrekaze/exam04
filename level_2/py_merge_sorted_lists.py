@@ -19,12 +19,15 @@
 # - All duplicate elements: preserve all instances
 # - Negative numbers: handle correctly in sort order
 
+# def merge_sorted_lists(lists: list[list[int]]) -> list[int]:
+#     n_list = []
+#     for it in lists:
+#         n_list += it
+#     list.sort(n_list)
+#     return n_list
+
 def merge_sorted_lists(lists: list[list[int]]) -> list[int]:
-    n_list = []
-    for it in lists:
-        n_list += it
-    list.sort(n_list)
-    return n_list
+    return sorted(x for it in lists for x in it)
 
 print(merge_sorted_lists([[1, 3, 5], [2, 4, 6]])  ," Expected: [1, 2, 3, 4, 5, 6])")
 print(merge_sorted_lists([[1, 5, 9], [2, 3, 8], [4, 6, 7]])  ," Expected: [1, 2, 3, 4, 5, 6, 7, 8, 9]")

@@ -7,15 +7,20 @@
 # Moulinette Rules & Constraints
 # Forbidden built-ins / modules: collections.deque.rotate(). Use only permitted built-in functions to avoid getting 0 on exam day.
 
+# def array_rotation_detector(arr1: list, arr2: list) -> bool:
+#     if len(arr1) == 0 and len(arr2) == 0:
+#         return True
+#     if len(arr1) != len(arr2):
+#         return False
+#     for x in range(1, len(arr1)+1):
+#         if arr2 == arr1[-x:] + arr1[:-x]:
+#             return True
+#     return False
+
 def array_rotation_detector(arr1: list, arr2: list) -> bool:
-    if len(arr1) == 0 and len(arr2) == 0:
-        return True
-    if len(arr1) != len(arr2):
-        return False
-    for x in range(1, len(arr1)+1):
-        if arr2 == arr1[-x:] + arr1[:-x]:
-            return True
-    return False
+    return len(arr1) == len(arr2) and (
+        arr2 == arr1 or any(arr2 == arr1[i:] + arr1[:i] for i in range(1, len(arr1)))
+    )
 
 print(array_rotation_detector([1, 2, 3, 4, 5], [4, 5, 1, 2, 3]), "Expected: True")
 print(array_rotation_detector([1, 2, 3, 4, 5], [5, 1, 2, 3, 4]),  "Expected: True")
