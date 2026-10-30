@@ -6,22 +6,19 @@
 # - If the entire string is already a palindrome -> 0 cuts.
 # - In the worst case (all characters are distinct), the result is len(s) - 1 cuts.
 
-
-# def palindrome_partitioner(s: str) -> int:
-#     if not s:
-#         return 0
-#     cuts = [i - 1 for i in range(len(s) + 1)]
-#     for i in range(1, len(s) + 1):
-#         for j in range(i):
-#             if s[j:i] == s[j:i][::-1]:
-#                 cuts[i] = min(cuts[i], cuts[j] + 1)
-#     return cuts[-1]
-
 def palindrome_partitioner(s: str) -> int:
-    if s == s[::-1]:
-        return 0
-    return 1 + min(palindrome_partitioner(s[:i]) + palindrome_partitioner(s[i:]) for i in range(1, len(s)))
+    if len(s) == 0:
+        return  0
+    dp = [i for i in range(len(s))]
+    for i in range(len(s)):
+        for j in range(i + 1):
+            if s[j:i + 1] == s[j:i + 1][::-1]:
+                if j == 0:
+                    dp[i] = 0
+                else:
+                    dp[i] = min(dp[i], dp[j - 1] + 1)
+    return dp[-1]
 
-print(palindrome_partitioner("aab"),  "Expected: 1")
-print(palindrome_partitioner("aba"),  "Expected: 0")
-print(palindrome_partitioner("abc"),  "Expected: 2")
+print(palindrome_partitioner("aab") == 1)
+print(palindrome_partitioner("aba") == 0)
+print(palindrome_partitioner("abc") == 2)

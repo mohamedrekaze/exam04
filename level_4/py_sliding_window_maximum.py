@@ -1,5 +1,4 @@
 # Write a function that finds the maximum element in each sliding window of size k in an array. Return a list of maximums for each window position.
-#
 # The function should:
 # - Slide a window of size k through the array
 # - Find the maximum element in each window position
@@ -8,12 +7,20 @@
 # - Return empty list for invalid inputs
 
 def sliding_window_maximum(nums: list[int], k: int) -> list[int]:
-    pass
+    res = []
+    if len(nums) == 0 or k == 0:
+        return []
+    for i in range(len(nums)):
+        sub = nums[i:i + k]
+        if len(sub) < k:
+            return res
+        res.append(max(sub))
+    return res
 
-sliding_window_maximum([1, 3, -1, -3, 5, 3, 6, 7], 3)  # Expected: [3, 3, 5, 5, 6, 7]
-sliding_window_maximum([1, 2, 3, 4, 5], 2)  # Expected: [2, 3, 4, 5]
-sliding_window_maximum([5, 4, 3, 2, 1], 1)  # Expected: [5, 4, 3, 2, 1]
-sliding_window_maximum([1, 2, 3], 3)  # Expected: [3]
-sliding_window_maximum([1, 2, 3], 4)  # Expected: []
-sliding_window_maximum([], 2)  # Expected: []
-sliding_window_maximum([1, 2, 3], 0)  # Expected: []
+print(sliding_window_maximum([1, 3, -1, -3, 5, 3, 6, 7], 3) == [3, 3, 5, 5, 6, 7])
+print(sliding_window_maximum([1, 2, 3, 4, 5], 2) == [2, 3, 4, 5])
+print(sliding_window_maximum([5, 4, 3, 2, 1], 1) == [5, 4, 3, 2, 1])
+print(sliding_window_maximum([1, 2, 3], 3) == [3])
+print(sliding_window_maximum([1, 2, 3], 4) == [])
+print(sliding_window_maximum([], 2) == [])
+print(sliding_window_maximum([1, 2, 3], 0) == [])

@@ -26,20 +26,29 @@
 # - If any circular dependency exists, no valid installation order is possible
 
 def package_dependency_resolver(packages: dict[str, list[str]]) -> list[str]:
+    indegree = {pkg: 0 for pkg in packages}
+    dependents = {pkg: [] for pkg in packages}
+    for pkg, deps in packages.items():
+        for dep in set(deps):
+            indegree[pkg] += 1
+            dependents[dep].append(pkg)
+    wave = sorted([pkg for pkg in packages if indegree[pkg] == 0])
     result = []
-    while len(result) < len(packages):
-        wave = sorted(
-            pkg for pkg in packages
-            if pkg not in result
-            and all(dep in result or dep not in packages for dep in packages[pkg])
-        )
-        if not wave:
-            return []
-        result += wave
+    while wave:
+        result.extend(wave)
+        next_wave = []
+        for pkg in wave:
+            for dep in dependents[pkg]:
+                indegree[dep] -= 1
+                if indegree[dep] == 0:
+                    next_wave.append(dep)
+        wave = sorted(next_wave)
+    if len(result) != len(packages):
+        return []
     return result
 
-print(package_dependency_resolver({"app": ["database"], "database": ["driver"], "driver": []})  , 'Expected: ["driver", "database", "app"]')
-print(package_dependency_resolver({"A": [], "B": ["A"], "C": ["A", "B"]})  , 'Expected: ["A", "B", "C"]')
-print(package_dependency_resolver({})  ,'Expected: []')
-print(package_dependency_resolver({"X": ["Y"], "Y": ["X"]})  , 'Expected: []')
-print(package_dependency_resolver({"web": [], "api": [], "frontend": ["web"], "backend": ["api"]})  , 'Expected: ["api", "web", "backend", "frontend"]')
+print(package_dependency_resolver({"app": ["database"], "database": ["driver"], "driver": []}) == ["driver", "database", "app"])
+print(package_dependency_resolver({"A": [], "B": ["A"], "C": ["A", "B"]}) == ["A", "B", "C"])
+print(package_dependency_resolver({}) == [])
+print(package_dependency_resolver({"X": ["Y"], "Y": ["X"]}) == [])
+print(package_dependency_resolver({"web": [], "api": [], "frontend": ["web"], "backend": ["api"]}) == ["api", "web", "backend", "frontend"])
