@@ -20,10 +20,10 @@
 # - Negative numbers: handle correctly in sort order
 
 def merge_sorted_lists(lists: list[list[int]]) -> list[int]:
-    new_list = []
-    for list in lists:
-        new_list += list
-    return sorted(new_list)
+    t_list = []
+    for x in lists:
+        t_list.extend(x)
+    return sorted(t_list)
 
 print(merge_sorted_lists([[1, 3, 5], [2, 4, 6]]) == [1, 2, 3, 4, 5, 6])
 print(merge_sorted_lists([[1, 5, 9], [2, 3, 8], [4, 6, 7]]) == [1, 2, 3, 4, 5, 6, 7, 8, 9])

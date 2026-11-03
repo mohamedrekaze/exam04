@@ -8,7 +8,7 @@
 # - If any list is empty, the intersection is empty
 
 def list_intersection_finder(lists: list[list[int]]) -> list[int]:
-    if not lists:
+    if not len(lists):
         return []
     return list(set.intersection(*map(set, lists)))
 

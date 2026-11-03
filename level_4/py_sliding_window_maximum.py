@@ -7,13 +7,13 @@
 # - Return empty list for invalid inputs
 
 def sliding_window_maximum(nums: list[int], k: int) -> list[int]:
-    res = []
-    if len(nums) == 0 or k == 0:
+    if not len(nums) or not k:
         return []
-    for i in range(len(nums)):
-        sub = nums[i:i + k]
+    res = []
+    for x in range(len(nums)):
+        sub = nums[x:x+k]
         if len(sub) < k:
-            return res
+            break
         res.append(max(sub))
     return res
 

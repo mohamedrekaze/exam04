@@ -8,7 +8,7 @@
 
 def palindrome_partitioner(s: str) -> int:
     if len(s) == 0:
-        return  0
+        return 0
     dp = [i for i in range(len(s))]
     for i in range(len(s)):
         for j in range(i + 1):

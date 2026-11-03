@@ -9,11 +9,14 @@
 
 def constellation_mapper(stars: list[tuple[int, int]], dim: int) -> list[str]:
     sphere = [["." for i in range(dim)] for i in range(dim)]
-    for row, col in stars:
-        if row > dim or col > dim:
-            continue
-        sphere[row][col] = "*"
-    return ["".join(line) for line in sphere]
+    for s in stars:
+        if s[0] <= dim and s[1] <= dim:
+            sphere[s[0]][s[1]] = "*"
+    t_line = []
+    for x in sphere:
+        line = "".join(x)
+        t_line.append(line)
+    return t_line
 
 print(constellation_mapper([(0, 0), (1, 1), (2, 2)], 3) == ['*..', '.*.', '..*'])
 print(constellation_mapper([(1, 1), (0, 1), (2, 1), (1, 0), (1, 2)], 3) == ['.*.', '***', '.*.'])
